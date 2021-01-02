@@ -1,11 +1,11 @@
+import { PersianCalendarService } from './persian-calendar.service';
+import { CustomDateFormatter } from './calendar-date-formatter.provider';
 import {
   Component,
   ChangeDetectionStrategy,
   ViewChild,
   TemplateRef,
 } from '@angular/core';
-import { registerLocaleData } from '@angular/common';
-import localeFr from '@angular/common/locales/fr';
 import {
   startOfDay,
   endOfDay,
@@ -18,6 +18,7 @@ import {
 } from 'date-fns';
 import { Subject } from 'rxjs';
 import {
+  CalendarDateFormatter,
   CalendarEvent,
   CalendarEventAction,
   CalendarEventTimesChangedEvent,
@@ -43,8 +44,18 @@ const colors: any = {
   selector: 'app-root',
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: 'app.component.html',
+  providers: [
+    {
+      provide: CalendarDateFormatter,
+      // provide: PersianCalendarService,
+      useClass: CustomDateFormatter
+
+    }
+  ]
 })
 export class AppComponent {
+  farsiDate: any;
+  locale: string = "fa";
   @ViewChild('modalContent', { static: true }) modalContent: TemplateRef<any>;
 
   view: CalendarView = CalendarView.Month;
@@ -120,8 +131,13 @@ export class AppComponent {
 
   activeDayIsOpen: boolean = true;
 
-  constructor() { }
-
+  constructor(
+    public persianCalendar: PersianCalendarService
+  ) { }
+  getJalaliDate(date) {
+    var date1 = this.persianCalendar.PersianCalendar(date);
+    this.farsiDate = date1;
+  }
   dayClicked({ date, events }: { date: Date; events: CalendarEvent[] }): void {
     if (isSameMonth(date, this.viewDate)) {
       if (
@@ -141,6 +157,8 @@ export class AppComponent {
     newStart,
     newEnd,
   }: CalendarEventTimesChangedEvent): void {
+    console.log(this.events);
+
     this.events = this.events.map((iEvent) => {
       if (iEvent === event) {
         return {
@@ -160,6 +178,8 @@ export class AppComponent {
   }
 
   addEvent(): void {
+    console.log(this.events);
+
     this.events = [
       ...this.events,
       {
@@ -177,6 +197,8 @@ export class AppComponent {
   }
 
   deleteEvent(eventToDelete: CalendarEvent) {
+    console.log(this.events);
+
     this.events = this.events.filter((event) => event !== eventToDelete);
   }
 
