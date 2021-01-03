@@ -1,5 +1,4 @@
 import { PersianCalendarService } from './persian-calendar.service';
-// import { CustomDateFormatter } from './calendar-date-formatter.provider';
 import { CustomDateFormatter } from './calendar-date-formatter.provider'
 import {
   Component,
@@ -213,6 +212,6 @@ export class AppComponent implements OnInit {
     this.activeDayIsOpen = false;
   }
   ngOnInit() {
-
+    debugger
   }
 }
