@@ -8,3 +8,22 @@ pre {
     background-color: #f5f5f5;
     padding: 15px;
 }
+@font-face {
+    font-family: "IRANsance";
+    font-style: normal;
+    font-weight: 400;
+    src: url("assets/fonts/IRANSans/Farsi_numerals/webFonts/fonts/ttf/IRANSansWeb\(FaNum\).ttf");
+    src: local("IRANSansWeb"), local("IRANSansWeb"),
+        url("assets/fonts/IRANSans/Farsi_numerals/webFonts/fonts/ttf/IRANSansWeb\(FaNum\).ttf");
+}
+@font-face {
+    font-family: "IRANsanceBold";
+    font-style: normal;
+    font-weight: 400;
+    src: url("assets/fonts/IRANSans/Farsi_numerals/webFonts/fonts/ttf/IRANSansWeb\(FaNum\)_Bold.ttf");
+    src: local("IRANSansWeb"), local("IRANSansWeb"),
+        url("assets/fonts/IRANSans/Farsi_numerals/webFonts/fonts/ttf/IRANSansWeb\(FaNum\)_Bold.ttf");
+}
+body * {
+    font-family: IRANsance;
+}

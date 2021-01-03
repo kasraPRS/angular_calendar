@@ -1,10 +1,12 @@
 import { PersianCalendarService } from './persian-calendar.service';
-import { CustomDateFormatter } from './calendar-date-formatter.provider';
+// import { CustomDateFormatter } from './calendar-date-formatter.provider';
+import { CustomDateFormatter } from './calendar-date-formatter.provider'
 import {
   Component,
   ChangeDetectionStrategy,
   ViewChild,
   TemplateRef,
+  OnInit,
 } from '@angular/core';
 import {
   startOfDay,
@@ -22,8 +24,12 @@ import {
   CalendarEvent,
   CalendarEventAction,
   CalendarEventTimesChangedEvent,
+  CalendarMomentDateFormatter,
   CalendarView,
+  MOMENT,
 } from 'angular-calendar';
+// import * as moment from 'moment';
+import * as moment from 'jalali-moment';
 
 const colors: any = {
   red: {
@@ -39,7 +45,6 @@ const colors: any = {
     secondary: '#FDF1BA',
   },
 };
-
 @Component({
   selector: 'app-root',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -47,22 +52,24 @@ const colors: any = {
   providers: [
     {
       provide: CalendarDateFormatter,
-      // provide: PersianCalendarService,
-      useClass: CustomDateFormatter
-
+      useClass: CustomDateFormatter,
     }
   ]
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   farsiDate: any;
-  locale: string = "fa";
+  m = moment;
+  // locale: string = "fa";
+  locale = moment.locale('fa')
+
   @ViewChild('modalContent', { static: true }) modalContent: TemplateRef<any>;
 
   view: CalendarView = CalendarView.Month;
 
+  viewDate: Date = new Date();
+
   CalendarView = CalendarView;
 
-  viewDate: Date = new Date();
 
   modalData: {
     action: string;
@@ -92,7 +99,7 @@ export class AppComponent {
     {
       start: subDays(startOfDay(new Date()), 1),
       end: addDays(new Date(), 1),
-      title: 'A 3 day event',
+      title: 'سلام به آقای آزادی',
       color: colors.red,
       actions: this.actions,
       allDay: true,
@@ -104,21 +111,21 @@ export class AppComponent {
     },
     {
       start: startOfDay(new Date()),
-      title: 'An event with no end date',
+      title: 'خداحافظ آقای آزادی',
       color: colors.yellow,
       actions: this.actions,
     },
     {
       start: subDays(endOfMonth(new Date()), 3),
       end: addDays(endOfMonth(new Date()), 3),
-      title: 'A long event that spans 2 months',
+      title: 'من هم بدی نیستم',
       color: colors.blue,
       allDay: true,
     },
     {
       start: addHours(startOfDay(new Date()), 2),
       end: addHours(new Date(), 2),
-      title: 'A draggable and resizable event',
+      title: 'شکر',
       color: colors.yellow,
       actions: this.actions,
       resizable: {
@@ -134,10 +141,6 @@ export class AppComponent {
   constructor(
     public persianCalendar: PersianCalendarService
   ) { }
-  getJalaliDate(date) {
-    var date1 = this.persianCalendar.PersianCalendar(date);
-    this.farsiDate = date1;
-  }
   dayClicked({ date, events }: { date: Date; events: CalendarEvent[] }): void {
     if (isSameMonth(date, this.viewDate)) {
       if (
@@ -157,7 +160,7 @@ export class AppComponent {
     newStart,
     newEnd,
   }: CalendarEventTimesChangedEvent): void {
-    console.log(this.events);
+
 
     this.events = this.events.map((iEvent) => {
       if (iEvent === event) {
@@ -178,7 +181,7 @@ export class AppComponent {
   }
 
   addEvent(): void {
-    console.log(this.events);
+    // console.log(this.events);
 
     this.events = [
       ...this.events,
@@ -197,7 +200,7 @@ export class AppComponent {
   }
 
   deleteEvent(eventToDelete: CalendarEvent) {
-    console.log(this.events);
+    // console.log(this.events);
 
     this.events = this.events.filter((event) => event !== eventToDelete);
   }
@@ -208,5 +211,8 @@ export class AppComponent {
 
   closeOpenMonthViewDay() {
     this.activeDayIsOpen = false;
+  }
+  ngOnInit() {
+
   }
 }
